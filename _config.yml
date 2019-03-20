@@ -1,0 +1,8 @@
+title: Lightweight IOC container for unity3d
+description: 
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
