@@ -1,12 +1,47 @@
-> ### NOTIFICATION TO ALL USERS
-> Zenject, a software developed by Modest Tree, was previously transferred and posted at  https://github.com/svermeulen/Zenject. The user previously requested donations for support of the Zenject development via online accounts. Please be aware that Modest Tree is not affiliated with any donation accounts. 
->
-> The software has now been transferred back to the Modest Tree company account. We apologize for any confusion that this has caused Zenject users. 
->
-> Previous correspondence regarding Zenject was handled by Modest Tree employee, Steve Vermeulen, and he has done a great job keeping the community updated. Following his departure, Zenject requests are being handled by alternative employees, who will be engaging on all current and future requests to support the community.
->
-> Modest Tree looks forward to supporting all users of Zenject. You can also contact us at zenject@modesttree.com
+> ### CLARIFICATION FOR ALL USERS
 
+
+>We are proud to provide this useful tool to the community and encourage those developing projects to fork from it. To date Zenject has been forked Over 300 times and we love to see the benefit it is deriving for users and support this!
+>
+>Modest Tree’s Zenject is open-sourced in order to support the community and encourage collaborative development. This is clearly licensed with an MIT license to allow a high degree of flexibility and freedom of use.
+>
+>We look forward to hearing about the cool projects you are building with Zenject and supporting its use!
+Contact us through github or zenject@modesttree.com.
+
+> As our Team is looking at Improving and Supporting Zenject, Below is the list of Features and Changes wee are planning on applying to Zenject.
+>
+
+* move all pooling functionality into the factories
+    * add Free() to all IFactory types and have the default Free() dispose
+    * change pooling to allow a pooled object to be returned to pool via PoolFactory.Free()
+    * add a PoolHandle struct and IFactory.CreateHandle(), disposing the handle returns object to factory
+    * eliminate all pooling dependancies from the types being pooled
+    * add additional install functions to control pooling via installers rather than by explicit code
+    * PRO: when using PoolHandles, pooling or non-pooling is completely transparent to the consuming types
+    * CON: breaking changes with existing pooling techniques
+>
+* move unity-specific handling out of zenject core and into an additional library
+    * initially zenject was unity-only but now it is now used in standalone .EXE as well
+    * zenject codebase shows many scars from when it was unity-only
+    * eliminate all the #IFDEFs and move unity-specifics to external package
+    * allow building zenject core to DLL, unity-specifics stay as c# in unity project
+    * PRO: reduces compile times in unity
+    * PRO: more usable outside unity, fewer unity-landmines to step on
+    * PRO: far less zenject code to step through when debugging user-code
+    * CON: may require manual updating of some unity scenes and prefabs
+>
+* add dependancy graph resolve support
+
+    * somebody first needs to understand how zenject stores its bindings. I currently do not.
+    * we wana dump all the bindings for a set of scenes/installers to xml or something
+    * an external python or winforms tool allows viewing the binding graph
+    * show each container as a node, bindings are child nodes, draw dependancy links between bindings,this will make finding unnecessary bindings and fixing binding errors a lot easier,eventually we can also add a binding editor and error highlighting for bad bindings
+    * PRO: quality-of-life and general workflow improvement
+    * CON: additional software to maintain
+>
+>We are sharing this with community to help us prioritize and Find out if there is anything else that the community is looking for in the upcoming release. Looking forward to your feedback - Contact us through github or zenject@modesttree.com.
+>
+>
 <img src="Documentation/Images/ZenjectLogo.png?raw=true" alt="Zenject" width="600px" height="134px"/>
 
 ## Dependency Injection Framework for Unity3D
@@ -15,7 +50,7 @@
 
 ## <a id="introduction"></a>Introduction
 
-Zenject is a lightweight highly performant dependency injection framework built specifically to target Unity 3D (however it can be used outside of Unity as well).  It can be used to turn your application into a collection of loosely-coupled parts with highly segmented responsibilities.  Zenject can then glue the parts together in many different configurations to allow you to easily write, re-use, refactor and test your code in a scalable and extremely flexible way.
+Zenject is a lightweight highly performant dependency injection framework built specifically to target Unity 3D (however it can be used outside of Unity as well).  It can be used to turn your application into a collection of loosely-coupled parts with highly segmented responsibilities. Zenject can then glue the parts together in many different configurations to allow you to easily write, re-use, refactor and test your code in a scalable and extremely flexible way.
 
 Tested in Unity 3D on the following platforms: 
 * PC/Mac/Linux
