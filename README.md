@@ -5,11 +5,12 @@
 >
 >Modest Tree’s Zenject is open-sourced in order to support the community and encourage collaborative development. This is clearly licensed with an MIT license to allow a high degree of flexibility and freedom of use.
 >
->We look forward to hearing about the cool projects you are building with Zenject and supporting its use!
+We look forward to hearing about the cool projects you are building with Zenject and supporting its use!
 Contact us through github or zenject@modesttree.com.
 
-> As our Team is looking at Improving and Supporting Zenject, Below is the list of Features and Changes wee are planning on applying to Zenject.
->
+## <a id="introduction"></a>Upcoming Update
+
+As our Team is looking at Improving and Supporting Zenject, Below is the list of Features and Changes we are planning on applying to Zenject.
 
 * move all pooling functionality into the factories
     * add Free() to all IFactory types and have the default Free() dispose
@@ -38,9 +39,9 @@ Contact us through github or zenject@modesttree.com.
     * show each container as a node, bindings are child nodes, draw dependancy links between bindings,this will make finding unnecessary bindings and fixing binding errors a lot easier,eventually we can also add a binding editor and error highlighting for bad bindings
     * PRO: quality-of-life and general workflow improvement
     * CON: additional software to maintain
->
->We are sharing this with community to help us prioritize and Find out if there is anything else that the community is looking for in the upcoming release. Looking forward to your feedback - Contact us through github or zenject@modesttree.com.
->
+
+We are sharing this with community to help us prioritize and Find out if there is anything else that the community is looking for in the upcoming release. Looking forward to your feedback - Contact us through github or zenject@modesttree.com.
+##
 >
 <img src="Documentation/Images/ZenjectLogo.png?raw=true" alt="Zenject" width="600px" height="134px"/>
 
