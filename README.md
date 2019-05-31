@@ -1,4 +1,4 @@
-> ### CLARIFICATION FOR ALL USERS
+> ### COMMITMENT TO OPEN SOURCE
 
 
 >We are proud to provide this useful tool to the community and encourage those developing projects to fork from it. To date Zenject has been forked Over 300 times and we love to see the benefit it is deriving for users and support this!
