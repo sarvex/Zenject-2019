@@ -71,11 +71,10 @@ class VisualStudioHelper:
         if self._config.getBool('Compilation', 'UseDevenv'):
             buildCommand = '"[VisualStudioCommandLinePath]" {0} /build "{1}"'.format(solutionPath, buildConfig)
         else:
-            buildCommand = '"[MsBuildExePath]" /p:VisualStudioVersion=12.0'
-            #if rebuild:
-                #buildCommand += ' /t:Rebuild'
-            buildCommand += ' /p:Configuration="{0}" "{1}"'.format(buildConfig, solutionPath)
-
+            buildCommand = (
+                '"[MsBuildExePath]" /p:VisualStudioVersion=12.0'
+                + ' /p:Configuration="{0}" "{1}"'.format(buildConfig, solutionPath)
+            )
         self._sys.executeAndWait(buildCommand)
 
     def _getCustomSolutionPath(self, project, platform):

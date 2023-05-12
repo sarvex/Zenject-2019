@@ -38,10 +38,13 @@ class TestLogger(unittest.TestCase):
     def testOutputToFile(self):
         assertThat(False)
         #Container.bind('Config').toSingle(ConfigXml)
-        Container.bind('VarManager').toSingle(VarManager, {
-            'LogPath': ScriptDir + '/logtest.txt',
-            'LogPathPrevious': ScriptDir + '/logtest.prev.txt',
-        })
+        Container.bind('VarManager').toSingle(
+            VarManager,
+            {
+                'LogPath': f'{ScriptDir}/logtest.txt',
+                'LogPathPrevious': f'{ScriptDir}/logtest.prev.txt',
+            },
+        )
 
         log = Logger(False, True)
 

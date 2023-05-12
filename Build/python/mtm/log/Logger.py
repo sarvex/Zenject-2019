@@ -46,7 +46,7 @@ class Logger:
             self._startTime = datetime.now()
 
         # Need to format it now so that heading gets the args
-        if len(args) > 0:
+        if args:
             msg = msg.format(*args)
 
         self.currentHeading = msg
@@ -87,12 +87,8 @@ class Logger:
 
         message = ''
 
-        if self._errorOccurred:
-            message = 'Failed'
-        else:
-            message = 'Done'
-
-        message += ' (Took %s, time: %s, total elapsed: %s)' % (Util.formatTimeDelta(delta.total_seconds()), datetime.now().strftime('%H:%M:%S'), Util.formatTimeDelta(totalDelta.total_seconds()))
+        message = 'Failed' if self._errorOccurred else 'Done'
+        message += f" (Took {Util.formatTimeDelta(delta.total_seconds())}, time: {datetime.now().strftime('%H:%M:%S')}, total elapsed: {Util.formatTimeDelta(totalDelta.total_seconds())})"
 
         self._headerStartTime = None
 
@@ -103,7 +99,7 @@ class Logger:
 
     def _logInternal(self, msg, logType, *args):
 
-        if len(args) > 0:
+        if args:
             msg = msg.format(*args)
 
         if logType == LogType.Heading:
@@ -117,11 +113,11 @@ if __name__ == '__main__':
 
     class Log1:
         def log(self, logType, msg):
-            print('log 1: ' + msg)
+            print(f'log 1: {msg}')
 
     class Log2:
         def log(self, logType, msg):
-            print('log 2: ' + msg)
+            print(f'log 2: {msg}')
 
     Container.bind('LogStream').toSingle(Log1)
     Container.bind('LogStream').toSingle(Log2)

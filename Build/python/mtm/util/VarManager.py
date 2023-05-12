@@ -70,11 +70,7 @@ class VarManager:
 
             var = var[1:-1]
 
-            if var in allArgs:
-                replacement = allArgs[var]
-            else:
-                replacement = self.get(var)
-
+            replacement = allArgs[var] if var in allArgs else self.get(var)
             text = prefix + replacement + suffix
 
         if '[' in text:

@@ -51,54 +51,54 @@ class Runner:
             self._log.heading("Clearing output directory")
             self._sys.clearDirectoryContents('[OutputRootDir]')
 
-        if self._args.buildType == 'all' or self._args.buildType == 'win35':
+        if self._args.buildType in ['all', 'win35']:
             self._log.heading("Building windows 3.5")
             self._platform = Platforms.Windows
             self._enableNet35()
             self._createBuild()
 
-        if self._args.buildType == 'all' or self._args.buildType == 'win46':
+        if self._args.buildType in ['all', 'win46']:
             self._log.heading("Building windows 4.6")
             self._platform = Platforms.Windows
             self._enableNet46()
             self._createBuild()
 
-        if self._args.buildType == 'all' or self._args.buildType == 'wsa35':
+        if self._args.buildType in ['all', 'wsa35']:
             self._log.heading("Building WindowsStoreApp 3.5 .net")
             self._platform = Platforms.WindowsStoreApp
             self._enableNet35()
             self._enableNetBackend()
             self._createBuild()
 
-        if self._args.buildType == 'all' or self._args.buildType == 'wsa46':
+        if self._args.buildType in ['all', 'wsa46']:
             self._log.heading("Building WindowsStoreApp 4.6 .net")
             self._platform = Platforms.WindowsStoreApp
             self._enableNet46()
             self._enableNetBackend()
             self._createBuild()
 
-        if self._args.buildType == 'all' or self._args.buildType == 'wsa46il2cpp':
+        if self._args.buildType in ['all', 'wsa46il2cpp']:
             self._log.heading("Building WindowsStoreApp 4.6 il2cpp")
             self._platform = Platforms.WindowsStoreApp
             self._enableNet46()
             self._enableIl2cpp()
             self._createBuild()
 
-        if self._args.buildType == 'all' or self._args.buildType == 'wsa35il2cpp':
+        if self._args.buildType in ['all', 'wsa35il2cpp']:
             self._log.heading("Building WindowsStoreApp 3.5 il2cpp")
             self._platform = Platforms.WindowsStoreApp
             self._enableNet35()
             self._enableIl2cpp()
             self._createBuild()
 
-        if self._args.buildType == 'all' or self._args.buildType == 'webgl35':
+        if self._args.buildType in ['all', 'webgl35']:
             self._log.heading("Building WebGl 3.5")
             self._platform = Platforms.WebGl
             self._enableNet35()
             self._createBuild()
             self._sys.copyFile('[WebGlTemplate]', '[OutputRootDir]/WebGl/Net35/Web.config')
 
-        if self._args.buildType == 'all' or self._args.buildType == 'webgl46':
+        if self._args.buildType in ['all', 'webgl46']:
             self._log.heading("Building WebGl 4.6")
             self._platform = Platforms.WebGl
             self._enableNet46()
@@ -186,8 +186,12 @@ class Runner:
         self._unityHelper.openUnity('[UnityProjectPath]', self._platform)
 
     def _runEditorFunction(self, functionName):
-        self._log.info("Calling SampleBuilder." + functionName)
-        self._unityHelper.runEditorFunction('[UnityProjectPath]', 'Zenject.Internal.SampleBuilder.' + functionName, self._platform)
+        self._log.info(f"Calling SampleBuilder.{functionName}")
+        self._unityHelper.runEditorFunction(
+            '[UnityProjectPath]',
+            f'Zenject.Internal.SampleBuilder.{functionName}',
+            self._platform,
+        )
 
 def installBindings():
 

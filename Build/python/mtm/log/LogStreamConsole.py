@@ -82,7 +82,7 @@ class LogStreamConsole:
         logType, message = self.classifyMessage(logType, message)
 
         if logType is not None:
-            if logType == LogType.HeadingFailed or logType == LogType.Error:
+            if logType in [LogType.HeadingFailed, LogType.Error]:
                 self._output(logType, message, sys.stderr, self._useColors)
             else:
                 self._output(logType, message, sys.stdout, self._useColors)
@@ -124,7 +124,7 @@ class LogStreamConsole:
             ColorConsole.set_text_attr(self._defaultColors)
 
     def _getColorAttrs(self, logType):
-        if logType == LogType.Heading or logType == LogType.HeadingSucceeded:
+        if logType in [LogType.Heading, LogType.HeadingSucceeded]:
             return ColorConsole.FOREGROUND_CYAN | self._defaultBg | ColorConsole.FOREGROUND_INTENSITY
 
         if logType == LogType.Good:
@@ -133,7 +133,7 @@ class LogStreamConsole:
         if logType == LogType.Warn:
             return ColorConsole.FOREGROUND_YELLOW | self._defaultBg | ColorConsole.FOREGROUND_INTENSITY
 
-        if logType == LogType.Error or logType == LogType.HeadingFailed:
+        if logType in [LogType.Error, LogType.HeadingFailed]:
             return ColorConsole.FOREGROUND_RED | self._defaultBg | ColorConsole.FOREGROUND_INTENSITY
 
         if logType == LogType.Debug:
@@ -155,11 +155,7 @@ class LogStreamConsole:
     def _getPatterns(self, settingName):
         patternStrings = self._config.tryGetList([], 'Console', settingName)
 
-        result = []
-        for pattern in patternStrings:
-            result.append(re.compile('.*' + pattern + '.*'))
-
-        return result
+        return [re.compile(f'.*{pattern}.*') for pattern in patternStrings]
 
     def tryMatchPattern(self, message, maps, patterns):
         for logMap in maps:
@@ -167,51 +163,56 @@ class LogStreamConsole:
                 return logMap.regex.sub(logMap.sub, message)
 
         for pattern in patterns:
-            match = pattern.match(message)
-
-            if match:
+            if match := pattern.match(message):
                 groups = match.groups()
 
-                if len(groups) > 0:
-                    return groups[0]
-
-                return message
-
+                return groups[0] if len(groups) > 0 else message
         return None
 
     def classifyMessage(self, logType, message):
 
-        if logType == LogType.Info or logType == LogType.Heading or logType == LogType.HeadingFailed or logType == LogType.HeadingSucceeded or logType == LogType.Good or logType == LogType.Warn or logType == LogType.Error:
+        if logType in [
+            LogType.Info,
+            LogType.Heading,
+            LogType.HeadingFailed,
+            LogType.HeadingSucceeded,
+            LogType.Good,
+            LogType.Warn,
+            LogType.Error,
+        ]:
             return logType, message
 
-        parsedMessage = self.tryMatchPattern(message, self.errorMaps, self.errorPatterns)
-        if parsedMessage:
+        if parsedMessage := self.tryMatchPattern(
+            message, self.errorMaps, self.errorPatterns
+        ):
             return LogType.Error, parsedMessage
 
         if not any(p.match(message) for p in self.warningPatternsIgnore):
-            parsedMessage = self.tryMatchPattern(message, self.warningMaps, self.warningPatterns)
-            if parsedMessage:
+            if parsedMessage := self.tryMatchPattern(
+                message, self.warningMaps, self.warningPatterns
+            ):
                 return LogType.Warn, parsedMessage
 
-        parsedMessage = self.tryMatchPattern(message, self.headingMaps, self.headingPatterns)
-        if parsedMessage:
+        if parsedMessage := self.tryMatchPattern(
+            message, self.headingMaps, self.headingPatterns
+        ):
             return LogType.Heading, parsedMessage
 
-        parsedMessage = self.tryMatchPattern(message, self.goodMaps, self.goodPatterns)
-        if parsedMessage:
+        if parsedMessage := self.tryMatchPattern(
+            message, self.goodMaps, self.goodPatterns
+        ):
             return LogType.Good, parsedMessage
 
-        parsedMessage = self.tryMatchPattern(message, self.infoMaps, self.infoPatterns)
-        if parsedMessage:
+        if parsedMessage := self.tryMatchPattern(
+            message, self.infoMaps, self.infoPatterns
+        ):
             return LogType.Info, parsedMessage
 
         if self._verbose:
-            parsedMessage = self.tryMatchPattern(message, self.debugMaps, self.debugPatterns)
-            if parsedMessage:
+            if parsedMessage := self.tryMatchPattern(
+                message, self.debugMaps, self.debugPatterns
+            ):
                 return LogType.Debug, parsedMessage
 
-        if self._veryVerbose:
-            return LogType.Debug, message
-
-        return None, message
+        return (LogType.Debug, message) if self._veryVerbose else (None, message)
 

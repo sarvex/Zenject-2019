@@ -45,7 +45,7 @@ class SystemHelper:
     def executeAndWait(self, commandStr, startDir = None):
         expandedStr = self._varManager.expand(commandStr)
 
-        self._log.debug("Executing '%s'" % expandedStr)
+        self._log.debug(f"Executing '{expandedStr}'")
 
         vals = self._splitCommandStr(expandedStr)
 
@@ -55,10 +55,14 @@ class SystemHelper:
         result = self._processRunner.waitForProcessOrTimeout(vals, self._timeout, startDir)
 
         if result == ResultType.Error:
-            raise ProcessErrorCodeException('Command returned with error code while executing: %s' % expandedStr)
+            raise ProcessErrorCodeException(
+                f'Command returned with error code while executing: {expandedStr}'
+            )
 
         if result == ResultType.TimedOut:
-            raise ProcessTimeoutException('Timed out while waiting for command: %s' % expandedStr)
+            raise ProcessTimeoutException(
+                f'Timed out while waiting for command: {expandedStr}'
+            )
 
         assertThat(result == ResultType.Success)
 
@@ -78,7 +82,7 @@ class SystemHelper:
     def executeShellCommand(self, commandStr, startDir = None):
         expandedStr = self._varManager.expand(commandStr)
 
-        self._log.debug("Executing '%s'" % expandedStr)
+        self._log.debug(f"Executing '{expandedStr}'")
 
         if startDir != None:
             startDir = self._varManager.expand(startDir)
@@ -86,7 +90,9 @@ class SystemHelper:
         result = self._processRunner.execShellCommand(expandedStr, startDir)
 
         if result == ResultType.Error:
-            raise ProcessErrorCodeException('Command returned with error code while executing: %s' % expandedStr)
+            raise ProcessErrorCodeException(
+                f'Command returned with error code while executing: {expandedStr}'
+            )
 
         assertThat(result == ResultType.Success, "Expected success result but found '{0}'".format(result))
 
@@ -100,7 +106,7 @@ class SystemHelper:
         return shlex.split(commandStr)
 
     def executeAndReturnOutput(self, commandStr):
-        self._log.debug("Executing '%s'" % commandStr)
+        self._log.debug(f"Executing '{commandStr}'")
         return subprocess.getoutput(self._splitCommandStr(commandStr)).strip()
 
     def walkDir(self, dirPath):
@@ -110,8 +116,7 @@ class SystemHelper:
     def getParentDirectoriesWithSelf(self, path):
         yield path
 
-        for parentDir in self.getParentDirectories(path):
-            yield parentDir
+        yield from self.getParentDirectories(path)
 
     def getParentDirectories(self, path):
         path = self._varManager.expand(path)
@@ -225,14 +230,14 @@ class SystemHelper:
         files = os.listdir(dirPath)
 
         if len(files) == 0:
-            self._log.debug("Removing empty folder '%s'" % dirPath)
+            self._log.debug(f"Removing empty folder '{dirPath}'")
             os.rmdir(dirPath)
             numDirsDeleted += 1
 
-            metaFilePath = dirPath + '/../' + os.path.basename(dirPath) + '.meta'
+            metaFilePath = f'{dirPath}/../{os.path.basename(dirPath)}.meta'
 
             if os.path.isfile(metaFilePath):
-                self._log.debug("Removing meta file '%s'" % metaFilePath)
+                self._log.debug(f"Removing meta file '{metaFilePath}'")
                 os.remove(metaFilePath)
 
         return numDirsDeleted
@@ -285,8 +290,7 @@ class SystemHelper:
         for root, dirs, files in os.walk(startDir):
             for basename in files:
                 if fnmatch.fnmatch(basename, pattern):
-                    filename = os.path.join(root, basename)
-                    yield filename
+                    yield os.path.join(root, basename)
 
     def renameFile(self, currentName, newName):
         os.rename(self._varManager.expand(currentName), self._varManager.expand(newName))
@@ -315,7 +319,7 @@ class SystemHelper:
             os.unlink(filePath)
             count += 1
 
-        self._log.debug("Removed %s files matching '%s'" % (count, regex))
+        self._log.debug(f"Removed {count} files matching '{regex}'")
 
     def makeMissingDirectoriesInPath(self, dirPath):
         dirPath = self._varManager.expand(dirPath)

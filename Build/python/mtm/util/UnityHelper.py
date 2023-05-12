@@ -55,7 +55,7 @@ class UnityHelper:
         if batchMode:
             extraArgs += ' -batchmode -nographics'
 
-        extraArgs += ' ' + extraExtraArgs
+        extraArgs += f' {extraExtraArgs}'
 
         self.runEditorFunctionRaw(projectPath, editorCommand, platform, extraArgs)
 
@@ -100,9 +100,9 @@ class UnityHelper:
             command = '"[UnityExePath]" -buildTarget {0} -projectPath "{1}"'.format(self._getBuildTargetArg(platform), projectPath)
 
             if editorCommand:
-                command += ' -executeMethod ' + editorCommand
+                command += f' -executeMethod {editorCommand}'
 
-            command += ' ' + extraArgs
+            command += f' {extraArgs}'
 
             self._sys.executeAndWait(command)
 
